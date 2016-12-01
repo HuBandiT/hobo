@@ -187,7 +187,7 @@ module Hobo
             name = creator.name
             def_auto_action name do
               creator_page_action name
-            end
+            end  unless creator.options[:params].blank?
             def_auto_action "do_#{name}" do
               do_creator_action name
             end
@@ -197,7 +197,7 @@ module Hobo
             name = transition.name
             def_auto_action name do
               transition_page_action name
-            end
+            end  unless transition.options[:params].blank?
             def_auto_action "do_#{name}" do
               do_transition_action name
             end
