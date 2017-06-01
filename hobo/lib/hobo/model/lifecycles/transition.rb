@@ -34,7 +34,7 @@ module Hobo
 
 
         def change_state(record)
-          record.lifecycle.clear_key unless options[:new_key] || options[:keep_key]
+          record.lifecycle.clear_key unless options[:new_key] || options[:keep_key]  unless record.class::Lifecycle.options[:key_timestamp_field] == false
           record.lifecycle.become(get_state(record, end_state))
         end
 
