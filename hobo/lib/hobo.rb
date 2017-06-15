@@ -40,20 +40,19 @@ module Hobo
        search_targets = Hobo::Model.all_models.select {|m| m.search_columns.any? }
       end
 
-      query_words = ActiveRecord::Base.connection.quote_string(query).split
+      query_words = query.split.map{|w| ActiveRecord::Base.connection.quote_string "%#{w.gsub(/([%_])/,'\\\\\1')}%" }
 
       search_targets.build_hash do |search_target|
-        conditions = []
-        parameters = []
-        like_operator = ActiveRecord::Base.connection.adapter_name =~ /postg/i ? 'ILIKE' : 'LIKE'
-        query_words.each do |word|
-          column_queries = search_target.search_columns.map { |column| column == "id" ? "CAST(#{column} AS varchar) #{like_operator} ?" : "#{column} #{like_operator} ?" }
-          conditions << "(" + column_queries.join(" or ") + ")"
-          parameters.concat(["%#{word}%"] * column_queries.length)
-        end
-        conditions = conditions.join(" and ")
+        conditions = query_words.map do |word|
+          search_target.search_columns.map { |column|
+            arel_column = search_target.arel_table[column]
+            arel_column = Arel::Nodes::NamedFunction.new("CAST", arel_column.as("varchar"))  if column == "id"
 
-        results = search_target.where(conditions, *parameters)
+            arel_column.matches(word)
+          }.reduce(&:or)
+        end.reduce(&:and)
+
+        results = search_target.where(conditions)
         [search_target.name, results] unless results.empty?
       end
     end
