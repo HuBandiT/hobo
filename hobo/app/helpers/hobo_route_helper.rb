@@ -49,6 +49,10 @@ module HoboRouteHelper
 
       params[:action] = action unless action.in?(IMPLICIT_ACTIONS)
 
+      options[:method] ||= case action.to_sym
+                             when :destroy; :delete
+                           end
+
       if obj.respond_to?(:member_class)
         if obj.respond_to?(:origin) && obj.origin
           # Asking for URL of a collection, e.g. category/1/adverts or category/1/adverts/new
