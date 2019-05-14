@@ -124,7 +124,11 @@ module HoboPermissionsHelper
           # If possible, we also check if the current *value* of the field is viewable
           if field.is_one_of?(Symbol, String) && (v = object.send(field)) && v.respond_to?(:viewable_by?)
             if v.is_a?(Array)
-              v.new_candidate.viewable_by?(current_user, nil)
+              begin
+                v.new_candidate.viewable_by?(current_user, nil)
+              rescue ActiveRecord::HasManyThroughNestedAssociationsAreReadonly
+                false #FIXME: erring on the safe side for now - but maybe it could be done smarter
+              end
             else
               v.viewable_by?(current_user, nil)
             end
