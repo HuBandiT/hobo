@@ -53,7 +53,7 @@ If the transition could not be found, the user does not have permissions for the
       ajax_attributes[:method] = html_attributes[:method]
     %><form lifecycle="&transition_name" merge-attrs="&ajax_attributes" class="button_to" param>
         <input type="hidden" name="key" value="&this.lifecycle.provided_key" if="&this.lifecycle.provided_key"/>
-        <submit label="&label" merge-attributes="&html_attributes" param="button"/>
+        <submit label="&label" merge-attrs="&html_attributes" param="button"/>
       </form><%
     else %><%=
       url = object_url(this, transition_name, :method => html_attributes[:method])
