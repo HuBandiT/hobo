@@ -288,7 +288,7 @@ module Hobo
                    # the user needs create/destroy permission on the member model
                    send(reflection.name).new_candidate
                  end
-        record.creatable_by?(user) && record.destroyable_by?(user)
+        record.creatable_by?(user) ||  record.updatable_by?(user) || record.destroyable_by?(user)
       end
 
       # ----------------------- #
