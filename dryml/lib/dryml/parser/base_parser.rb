@@ -6,14 +6,14 @@ module Dryml::Parser
 
     DRYML_NAME_STR          = "#{NCNAME_STR}(?::(?:#{NCNAME_STR})?)?"
     DRYML_ATTRIBUTE_PATTERN = if NEW_REX
-                                /\s*(#{NAME_STR})(?:\s*=\s*(["'])(.*?)\4)?/um
+                                /\s*(#{DRYML_NAME_STR})(?:\s*=\s*(["'])(.*?)\4)?/um
                               else
-                                /\s*(#{NAME_STR})(?:\s*=\s*(["'])(.*?)\2)?/um
+                                /\s*(#{DRYML_NAME_STR})(?:\s*=\s*(["'])(.*?)\2)?/um
                               end
     DRYML_TAG_MATCH         = if NEW_REX
-                                /^<((?>#{DRYML_NAME_STR}))\s*((?>\s+#{NAME_STR}(?:\s*=\s*(["']).*?\5)?)*)\s*(\/)?>/um
+                                /^<((?>#{DRYML_NAME_STR}))\s*((?>\s+#{DRYML_NAME_STR}(?:\s*=\s*(["']).*?\5)?)*)\s*(\/)?>/um
                               else
-                                /^<((?>#{DRYML_NAME_STR}))\s*((?>\s+#{NAME_STR}(?:\s*=\s*(["']).*?\3)?)*)\s*(\/)?>/um
+                                /^<((?>#{DRYML_NAME_STR}))\s*((?>\s+#{DRYML_NAME_STR}(?:\s*=\s*(["']).*?\3)?)*)\s*(\/)?>/um
                               end
     DRYML_CLOSE_MATCH       = /^\s*<\/(#{DRYML_NAME_STR})\s*>/um
 
