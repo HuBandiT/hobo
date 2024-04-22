@@ -108,7 +108,8 @@ ActiveRecord::Associations::HasManyThroughAssociation.class_eval do
     problem_joiner=nil
     association = self.respond_to?(:proxy_association) ? proxy_association : self
     through_assoc_name = association.send(:through_reflection).name
-    if user && records.any? { |r|
+    is_habtm = ActiveRecord::Reflection::HasAndBelongsToManyReflection === reflection.parent_reflection.last
+    if !is_habtm && user && records.any? { |r|
         ja = construct_join_attributes(r)
         problem_joiner = joiner = association.owner.send(through_assoc_name).where(ja).first
         joiner.is_a?(Hobo::Model) && !joiner.destroyable_by?(user)
