@@ -279,6 +279,8 @@ module Hobo
 
         return false unless reflection.options[:accessible]
 
+        return true if reflection.is_a? ActiveRecord::Reflection::HasAndBelongsToManyReflection
+
         record = if (through = reflection.through_reflection)
                    # For edit permission on a has_many :through,
                    # the user needs create+destroy permission on the join model
