@@ -138,7 +138,7 @@ module Hobo
 
     def hobo_update_with_account_flash(*args)
       hobo_update_without_account_flash(*args) do
-        flash[:notice] = ht(:"#{model.to_s.underscore}.messages.update.success", :default=>["Changes to your account were saved"]) if valid? && @this == current_user
+        flash_notice = ht(:"#{model.to_s.underscore}.messages.update.success", :default=>["Changes to your account were saved"]) if valid? && @this == current_user
         yield if block_given?
       end
     end
